@@ -8,10 +8,11 @@ import { useCart } from '@/context/CartContext';
 interface SearchModalProps {
     isOpen: boolean;
     onClose: () => void;
+    initialQuery?: string;
 }
 
-export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
-    const [query, setQuery] = useState('');
+export default function SearchModal({ isOpen, onClose, initialQuery = '' }: SearchModalProps) {
+    const [query, setQuery] = useState(initialQuery);
     const [results, setResults] = useState(products);
     const inputRef = useRef<HTMLInputElement>(null);
     const { addToCart } = useCart();
@@ -20,6 +21,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         if (isOpen) {
             inputRef.current?.focus();
             document.body.style.overflow = 'hidden';
+            // Set initial query when modal opens
+            if (initialQuery) {
+                setQuery(initialQuery);
+            }
         } else {
             document.body.style.overflow = 'unset';
             setQuery('');
@@ -28,7 +33,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         return () => {
             document.body.style.overflow = 'unset';
         };
-    }, [isOpen]);
+    }, [isOpen, initialQuery]);
 
     useEffect(() => {
         if (query.trim()) {

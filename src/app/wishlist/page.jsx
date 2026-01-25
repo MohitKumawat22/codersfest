@@ -62,9 +62,7 @@ export default function Wishlist() {
                             </button>
 
                             <div className="p-4">
-                                <Link href={`/product/${item.id}`}>
-                                    <h3 className="font-bold text-[#33211D] mb-2 hover:text-[#D4A373] transition-colors">{item.name}</h3>
-                                </Link>
+                                <h3 className="font-bold text-[#33211D] mb-2 hover:text-[#D4A373] transition-colors cursor-pointer">{item.name}</h3>
                                 <div className="flex items-center gap-2 mb-3">
                                     <span className="font-bold text-lg text-[#33211D]">${item.price.toFixed(2)}</span>
                                     {item.oldPrice && (

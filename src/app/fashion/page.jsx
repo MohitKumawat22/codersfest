@@ -107,7 +107,7 @@ export default function FashionPage() {
                     <div className="flex flex-col gap-6 h-full">
                         {/* Medium Item - Men */}
                         <div className="relative bg-[#F5F5F7] rounded-sm overflow-hidden group cursor-pointer flex-1 min-h-[250px]">
-                            <div className="absolute top-8 left-8 z-10 z-20">
+                            <div className="absolute top-8 left-8 z-20">
                                 <span className="bg-white px-3 py-1 text-xs font-bold rounded-full mb-3 inline-block shadow-sm">1500+ Items</span>
                                 <h2 className="text-3xl font-serif font-bold text-[#33211D] mb-2">For Men's</h2>
                                 <p className="text-gray-400 text-xs text-sm">Blazers, Jackets & Coats</p>

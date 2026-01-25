@@ -62,11 +62,9 @@ export default function ProductGrid({ products }) {
                             </div>
                         </Link>
                         <div>
-                            <Link href={`/product/${product.id}`}>
-                                <h3 className="font-bold text-[#171717] group-hover:text-[#D4A373] transition-colors mb-2">
-                                    {product.name}
-                                </h3>
-                            </Link>
+                            <h3 className="font-bold text-[#171717] group-hover:text-[#D4A373] transition-colors mb-2 cursor-pointer">
+                                {product.name}
+                            </h3>
                             <div className="flex items-center space-x-2">
                                 <span className="font-bold text-[#171717]">${product.price.toFixed(2)}</span>
                                 {product.oldPrice && (
