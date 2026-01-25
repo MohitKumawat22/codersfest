@@ -39,7 +39,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
-      </body >
-    </html >
-  );
-}
+
