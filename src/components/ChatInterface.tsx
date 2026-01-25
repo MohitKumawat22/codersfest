@@ -4,10 +4,10 @@ import { processFastBrain, FastBrainAction } from "@/lib/fastBrain";
 import { ArrowUp, Sparkles } from "lucide-react";
 
 interface ChatInterfaceProps {
-    onFastAction: (action: FastBrainAction) => void;
+    onFastAction?: (action: FastBrainAction) => void;
 }
 
-export default function ChatInterface({ onFastAction }: ChatInterfaceProps) {
+export default function ChatInterface({ onFastAction = () => { } }: ChatInterfaceProps) {
     const [input, setInput] = useState("");
     const [isThinking, setIsThinking] = useState(false);
 
