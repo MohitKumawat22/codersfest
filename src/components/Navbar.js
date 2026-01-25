@@ -2,12 +2,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Search, Heart, ShoppingCart, User, Menu, X } from "lucide-react";
-
-import { useCart } from "../context/CartContext";
+import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
+import SearchModal from "@/components/SearchModal";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
     const { cartCount } = useCart();
+    const { wishlistCount } = useWishlist();
 
     return (
         <>
@@ -30,8 +33,21 @@ const Navbar = () => {
 
                     {/* Icons (Mobile & Desktop) */}
                     <div className="flex items-center md:order-2 space-x-4 md:space-x-6">
-                        <button className="text-gray-600 hover:text-[#33211D] transition-colors"><Search size={20} /></button>
-                        <button className="hidden md:block text-gray-600 hover:text-[#33211D] transition-colors"><Heart size={20} /></button>
+                        <button
+                            onClick={() => setSearchOpen(true)}
+                            aria-label="Search"
+                            className="text-gray-600 hover:text-[#33211D] transition-colors"
+                        >
+                            <Search size={20} />
+                        </button>
+                        <Link href="/wishlist" className="hidden md:block text-gray-600 hover:text-[#33211D] transition-colors relative">
+                            <Heart size={20} />
+                            {wishlistCount > 0 && (
+                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+                                    {wishlistCount}
+                                </span>
+                            )}
+                        </Link>
                         <Link href="/cart" className="text-gray-600 hover:text-[#33211D] transition-colors relative">
                             <ShoppingCart size={20} />
                             {cartCount > 0 && (
@@ -40,7 +56,9 @@ const Navbar = () => {
                                 </span>
                             )}
                         </Link>
-                        <button className="hidden md:block text-gray-600 hover:text-[#33211D] transition-colors"><User size={20} /></button>
+                        <Link href="/profile" aria-label="User account" className="hidden md:block text-gray-600 hover:text-[#33211D] transition-colors">
+                            <User size={20} />
+                        </Link>
 
                         <button
                             onClick={() => setIsOpen(!isOpen)}
@@ -77,12 +95,13 @@ const Navbar = () => {
                                 <Link href="/deals" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Deals</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Contact</Link>
+                                <Link href="/contact" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Contact</Link>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
+            <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
         </>
     );
 };

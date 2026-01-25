@@ -1,10 +1,13 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Truck, CreditCard, Headset, Heart, Eye, ShoppingCart } from "lucide-react";
+import { ArrowRight, Truck, CreditCard, Headset, Heart, Eye, ShoppingCart, Shirt } from "lucide-react";
+import VirtualMannequin from "@/components/VirtualMannequin";
 
 export default function Home() {
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
   const categories = [
     { title: "For Women's", count: "2500+ items", image: "/placeholder-women.jpg", desc: "Lorem ipsum dolor sit amet." },
     { title: "For Men's", count: "1500+ items", image: "/placeholder-men.jpg", desc: "Blazers, T-Shirts and Shirts, Jackets & Coats" },
@@ -20,6 +23,12 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-white text-[#171717]">
+      <VirtualMannequin
+        isOpen={!!selectedProduct}
+        product={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+      />
+
       {/* Hero Section */}
       <section className="bg-[#FAF9F6] pt-8 md:pt-16 pb-16 md:pb-24 relative overflow-hidden">
         <div className="max-w-screen-xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -191,8 +200,12 @@ export default function Home() {
                     <button className="p-3 bg-white hover:bg-[#33211D] hover:text-white rounded-lg shadow-lg transition-colors">
                       <ShoppingCart size={18} />
                     </button>
-                    <button className="p-3 bg-white hover:bg-[#33211D] hover:text-white rounded-lg shadow-lg transition-colors">
-                      <Eye size={18} />
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setSelectedProduct(product); }}
+                      className="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-lg shadow-lg transition-colors group/try"
+                      title="Virtual Try-On"
+                    >
+                      <Shirt size={18} className="group-hover/try:animate-pulse" />
                     </button>
                   </div>
 

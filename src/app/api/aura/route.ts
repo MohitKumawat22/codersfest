@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server';
+import { catalog } from '@/lib/catalog';
 
-const OLLAMA_URL = 'https://barry-nonenigmatic-nonnormally.ngrok-free.dev/api/generate'; // [!] UPDATE THIS if you restarted ngrok!
+// Use environment variable with fallback to localhost for development
+const OLLAMA_URL = process.env.OLLAMA_API_URL || 'http://localhost:11434/api/generate';
 const MODEL_NAME = 'llama3'; // Or 'mistral', ensure user has this pulled
+
+// RAG-lite: Simple context injection for small catalogs
+const PRODUCT_CONTEXT = catalog.map(p =>
+    `- ${p.name} ($${p.price}): ${p.description} [ID:${p.id}]`
+).join('\n');
 
 const SYSTEM_PERSONA = `
 You are Aura, an elite AI Fashion Stylist. 
@@ -13,13 +20,16 @@ CRITICAL RULES:
 2. If the user intent implies buying specific items, append a HIDDEN ACTION CODE at the end.
 3. Action Codes format: [ACTION:PAYLOAD]
 
+OUR CATALOG (RECOMMEND THESE):
+${PRODUCT_CONTEXT}
+
 Available Action Codes:
 - [FILTER:red] (for colors)
 - [FILTER:jacket] (for categories)
 - [REDIRECT:/shop] (for general shopping)
 
 Example User: "I need a dark vibe."
-Example Output: "Go for a cyberpunk leather jacket with LED accents. It screams night-city chic. [FILTER:jacket]"
+Example Output: "Go for the Cyberpunk Leather Jacket. It screams night-city chic. [FILTER:jacket]"
 `;
 
 export async function POST(req: Request) {

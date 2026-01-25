@@ -1,9 +1,20 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, Linkedin, ShieldCheck, Lock } from "lucide-react";
 
 const Footer = () => {
+    const [email, setEmail] = useState("");
+    const [subscribed, setSubscribed] = useState(false);
+
+    const handleSubscribe = (e) => {
+        e.preventDefault();
+        if (email && email.includes("@")) {
+            setSubscribed(true);
+            setEmail("");
+            setTimeout(() => setSubscribed(false), 3000);
+        }
+    };
     return (
         <footer className="bg-white border-t border-gray-100 pt-16 pb-8">
             <div className="max-w-screen-xl mx-auto px-4">
@@ -64,10 +75,20 @@ const Footer = () => {
                         </div>
 
                         <h4 className="font-bold text-[#33211D] mb-4">Stay in loop</h4>
-                        <div className="flex">
-                            <input type="email" placeholder="Enter your email" className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-l-md focus:ring-[#33211D] focus:border-[#33211D] block w-full p-2.5 outline-none" />
-                            <button className="bg-[#33211D] text-white px-4 rounded-r-md text-sm font-medium hover:bg-black transition-colors">Subscribe</button>
-                        </div>
+                        {subscribed && (
+                            <p className="text-green-600 text-sm mb-2">✓ Subscribed successfully!</p>
+                        )}
+                        <form onSubmit={handleSubscribe} className="flex">
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Enter your email"
+                                className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-l-md focus:ring-[#33211D] focus:border-[#33211D] block w-full p-2.5 outline-none"
+                                required
+                            />
+                            <button type="submit" className="bg-[#33211D] text-white px-4 rounded-r-md text-sm font-medium hover:bg-black transition-colors">Subscribe</button>
+                        </form>
                     </div>
                 </div>
 

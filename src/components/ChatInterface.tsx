@@ -40,6 +40,28 @@ export default function ChatInterface({ onFastAction = () => { } }: ChatInterfac
         setIsThinking(true);
 
         try {
+            // First, try FastBrain for instant responses  
+            const { processFastBrain } = await import('@/lib/fastBrain');
+            const fastAction = processFastBrain(userMsg);
+
+            if (fastAction && fastAction.type !== 'NONE') {
+                // Fast response - trigger action immediately
+                onFastAction(fastAction);
+
+                // Generate contextual response based on action
+                let quickResponse = "Let me help you with that! ";
+                if (fastAction.type === 'FILTER_PRODUCT') {
+                    quickResponse += `Filtering for ${fastAction.payload}...`;
+                } else if (fastAction.type === 'REDIRECT') {
+                    quickResponse += `Taking you to the right section...`;
+                }
+
+                setMessages(prev => [...prev, { role: 'assistant', content: quickResponse }]);
+                setIsThinking(false);
+                return;
+            }
+
+            // Fallback to Smart Brain (Ollama) for complex queries
             const res = await fetch('/api/aura', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -65,7 +87,11 @@ export default function ChatInterface({ onFastAction = () => { } }: ChatInterfac
             setMessages(prev => [...prev, { role: 'assistant', content: cleanResponse }]);
 
         } catch (err) {
-            setMessages(prev => [...prev, { role: 'assistant', content: "My connection is hazy. Is Ollama running?" }]);
+            console.error("Chat API Error:", err);
+            const errorMessage = err instanceof Error
+                ? `Connection error: ${err.message}. Please ensure Ollama is running.`
+                : "My connection is hazy. Please check if Ollama is running and try again.";
+            setMessages(prev => [...prev, { role: 'assistant', content: errorMessage }]);
         } finally {
             setIsThinking(false);
         }
@@ -92,8 +118,8 @@ export default function ChatInterface({ onFastAction = () => { } }: ChatInterfac
                         {messages.map((msg, idx) => (
                             <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`max-w-[85%] p-3 rounded-2xl text-sm ${msg.role === 'user'
-                                        ? 'bg-purple-600 text-white rounded-br-none'
-                                        : 'bg-white/10 text-gray-200 rounded-bl-none'
+                                    ? 'bg-purple-600 text-white rounded-br-none'
+                                    : 'bg-white/10 text-gray-200 rounded-bl-none'
                                     }`}>
                                     {msg.content}
                                 </div>
