@@ -90,9 +90,9 @@ export default function Deals() {
                                         >
                                             <ShoppingCart size={18} />
                                         </button>
-                                        <Link href={`/product/${product.id}`} className="p-3 bg-white hover:bg-[#33211D] hover:text-white rounded-lg shadow-lg transition-colors">
+                                        <button className="p-3 bg-white hover:bg-[#33211D] hover:text-white rounded-lg shadow-lg transition-colors">
                                             <Eye size={18} />
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
                             </Link>

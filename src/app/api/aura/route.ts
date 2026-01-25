@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { catalog } from '@/lib/catalog';
 
-// Use 127.0.0.1 for better stability than localhost
-const OLLAMA_URL = process.env.OLLAMA_API_URL || 'http://127.0.0.1:11434/api/generate';
+// Use Ngrok Tunnel URL for "The Ngrok Way" (Public Accessibility)
+const OLLAMA_URL = process.env.OLLAMA_API_URL || 'https://barry-nonenigmatic-nonnormally.ngrok-free.dev/api/generate';
 const MODEL_NAME = 'llama3'; // Or 'mistral', ensure user has this pulled
 
 // RAG-lite: Simple context injection for small catalogs
@@ -80,7 +80,7 @@ const getBackupResponse = (prompt: string): string => {
 
     // 1. Small Talk / Greetings (Crucial for "Hi")
     if (p.match(/^(hi|hello|hey|greetings|sup|yo)/)) {
-        return "Hi there! I'm Apna Sarthi. Tell me what you're looking for! (e.g. 'Red dress', 'Sneakers', 'Party outfit')";
+        return "Hi there! I'm Apna Sarthi. My neural core is active via tunnel! How can I help? (e.g. 'Red dress', 'Sneakers')";
     }
 
     if (p.includes('red') || p.includes('crimson')) return "Red is a bold choice! Check out our Scarlet Evening Dress. [FILTER:red]";
@@ -113,7 +113,10 @@ export async function POST(req: Request) {
 
         const response = await fetch(OLLAMA_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': 'true' // Bypass ngrok warning page
+            },
             body: JSON.stringify({
                 model: MODEL_NAME,
                 prompt: prompt,
