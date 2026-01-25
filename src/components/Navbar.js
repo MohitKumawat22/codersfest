@@ -4,10 +4,27 @@ import Link from "next/link";
 import { Search, Heart, ShoppingCart, User, Menu, X } from "lucide-react";
 
 import { useCart } from "../context/CartContext";
+import { products } from "../lib/data";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { cartCount } = useCart();
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+
+    const handleSearch = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+        if (query.length > 0) {
+            const results = products.filter((product) =>
+                product.name.toLowerCase().includes(query.toLowerCase())
+            );
+            setSearchResults(results);
+        } else {
+            setSearchResults([]);
+        }
+    };
 
     return (
         <>
@@ -30,7 +47,47 @@ const Navbar = () => {
 
                     {/* Icons (Mobile & Desktop) */}
                     <div className="flex items-center md:order-2 space-x-4 md:space-x-6">
-                        <button className="text-gray-600 hover:text-[#33211D] transition-colors"><Search size={20} /></button>
+                        {isSearchOpen ? (
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={handleSearch}
+                                    placeholder="Search..."
+                                    className="border border-gray-300 rounded-full py-1 px-3 text-sm focus:outline-none focus:border-[#33211D]"
+                                    autoFocus
+                                    onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)} // Delay close to allow click
+                                />
+                                {searchResults.length > 0 && (
+                                    <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 mt-1 rounded-lg shadow-lg max-h-60 overflow-y-auto z-50 w-64 md:w-80 -ml-16 md:ml-0">
+                                        {searchResults.map((product) => (
+                                            <Link
+                                                key={product.id}
+                                                href={`/product/${product.id}`}
+                                                className="block px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+                                                onClick={() => setIsSearchOpen(false)}
+                                            >
+                                                <img src={product.image} alt={product.name} className="w-8 h-8 object-cover rounded" />
+                                                <div className="flex-1">
+                                                    <p className="text-sm font-bold text-[#33211D]">{product.name}</p>
+                                                    <p className="text-xs text-gray-500">${product.price.toFixed(2)}</p>
+                                                </div>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
+                                <button onClick={() => setIsSearchOpen(false)} className="ml-2 text-gray-500 hover:text-red-500">
+                                    <X size={16} />
+                                </button>
+                            </div>
+                        ) : (
+                            <button
+                                onClick={() => setIsSearchOpen(true)}
+                                className="text-gray-600 hover:text-[#33211D] transition-colors"
+                            >
+                                <Search size={20} />
+                            </button>
+                        )}
                         <button className="hidden md:block text-gray-600 hover:text-[#33211D] transition-colors"><Heart size={20} /></button>
                         <Link href="/cart" className="text-gray-600 hover:text-[#33211D] transition-colors relative">
                             <ShoppingCart size={20} />

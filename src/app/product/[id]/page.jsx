@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { products, reviews as initialReviews } from "../../lib/data";
-import { useCart } from "../../context/CartContext";
+import { products, reviews as initialReviews } from "../../../lib/data";
+import { useCart } from "../../../context/CartContext";
 import { Star, ShoppingCart, ArrowLeft, User } from "lucide-react";
 import Link from "next/link";
 
