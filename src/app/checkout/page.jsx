@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "@/context/CartContext";
 import { CheckCircle, CreditCard, Truck, ShieldCheck, ArrowLeft } from "lucide-react";
 
 export default function Checkout() {

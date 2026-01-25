@@ -2,29 +2,16 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Search, Heart, ShoppingCart, User, Menu, X } from "lucide-react";
-
-import { useCart } from "../context/CartContext";
-import { products } from "../lib/data";
+import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
+import SearchModal from "@/components/SearchModal";
+import { products } from "@/lib/data";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
     const { cartCount } = useCart();
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
-
-    const handleSearch = (e) => {
-        const query = e.target.value;
-        setSearchQuery(query);
-        if (query.length > 0) {
-            const results = products.filter((product) =>
-                product.name.toLowerCase().includes(query.toLowerCase())
-            );
-            setSearchResults(results);
-        } else {
-            setSearchResults([]);
-        }
-    };
+    const { wishlistCount } = useWishlist();
 
     return (
         <>
@@ -47,48 +34,21 @@ const Navbar = () => {
 
                     {/* Icons (Mobile & Desktop) */}
                     <div className="flex items-center md:order-2 space-x-4 md:space-x-6">
-                        {isSearchOpen ? (
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={handleSearch}
-                                    placeholder="Search..."
-                                    className="border border-gray-300 rounded-full py-1 px-3 text-sm focus:outline-none focus:border-[#33211D]"
-                                    autoFocus
-                                    onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)} // Delay close to allow click
-                                />
-                                {searchResults.length > 0 && (
-                                    <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 mt-1 rounded-lg shadow-lg max-h-60 overflow-y-auto z-50 w-64 md:w-80 -ml-16 md:ml-0">
-                                        {searchResults.map((product) => (
-                                            <Link
-                                                key={product.id}
-                                                href={`/product/${product.id}`}
-                                                className="block px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
-                                                onClick={() => setIsSearchOpen(false)}
-                                            >
-                                                <img src={product.image} alt={product.name} className="w-8 h-8 object-cover rounded" />
-                                                <div className="flex-1">
-                                                    <p className="text-sm font-bold text-[#33211D]">{product.name}</p>
-                                                    <p className="text-xs text-gray-500">${product.price.toFixed(2)}</p>
-                                                </div>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                )}
-                                <button onClick={() => setIsSearchOpen(false)} className="ml-2 text-gray-500 hover:text-red-500">
-                                    <X size={16} />
-                                </button>
-                            </div>
-                        ) : (
-                            <button
-                                onClick={() => setIsSearchOpen(true)}
-                                className="text-gray-600 hover:text-[#33211D] transition-colors"
-                            >
-                                <Search size={20} />
-                            </button>
-                        )}
-                        <button className="hidden md:block text-gray-600 hover:text-[#33211D] transition-colors"><Heart size={20} /></button>
+                        <button
+                            onClick={() => setSearchOpen(true)}
+                            aria-label="Search"
+                            className="text-gray-600 hover:text-[#33211D] transition-colors"
+                        >
+                            <Search size={20} />
+                        </button>
+                        <Link href="/wishlist" className="hidden md:block text-gray-600 hover:text-[#33211D] transition-colors relative">
+                            <Heart size={20} />
+                            {wishlistCount > 0 && (
+                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+                                    {wishlistCount}
+                                </span>
+                            )}
+                        </Link>
                         <Link href="/cart" className="text-gray-600 hover:text-[#33211D] transition-colors relative">
                             <ShoppingCart size={20} />
                             {cartCount > 0 && (
@@ -97,7 +57,9 @@ const Navbar = () => {
                                 </span>
                             )}
                         </Link>
-                        <button className="hidden md:block text-gray-600 hover:text-[#33211D] transition-colors"><User size={20} /></button>
+                        <Link href="/profile" aria-label="User account" className="hidden md:block text-gray-600 hover:text-[#33211D] transition-colors">
+                            <User size={20} />
+                        </Link>
 
                         <button
                             onClick={() => setIsOpen(!isOpen)}
@@ -134,12 +96,13 @@ const Navbar = () => {
                                 <Link href="/deals" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Deals</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Contact</Link>
+                                <Link href="/contact" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Contact</Link>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
+            <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
         </>
     );
 };

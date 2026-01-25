@@ -1,14 +1,16 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Truck, CreditCard, Headset, Heart, Eye, ShoppingCart, Star } from "lucide-react";
+import { ArrowRight, Truck, CreditCard, Headset, Heart, Eye, ShoppingCart, Star, Shirt } from "lucide-react";
+import VirtualMannequin from "@/components/VirtualMannequin";
 
 import { useCart } from "../context/CartContext";
 import { products } from "../lib/data";
 
 export default function Home() {
   const { addToCart } = useCart();
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const categories = [
     { title: "For Women's", count: "2500+ items", image: "/placeholder-women.jpg", desc: "Lorem ipsum dolor sit amet." },
@@ -27,6 +29,12 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-white text-[#171717]">
+      <VirtualMannequin
+        isOpen={!!selectedProduct}
+        product={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+      />
+
       {/* Hero Section */}
       <section className="relative bg-[#FAF9F6] pt-12 pb-20 lg:pt-24 lg:pb-32 overflow-hidden">
         {/* Decorative Background Elements */}
@@ -236,6 +244,7 @@ export default function Home() {
                     <div className={`absolute top-3 left-3 ${product.color} text-[10px] font-bold px-2 py-1 rounded-sm uppercase tracking-wide`}>
                       {product.tag}
                     </div>
+
                     <button className="absolute top-3 right-3 p-2 bg-white rounded-full text-gray-400 hover:text-red-500 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 z-10">
                       <Heart size={16} />
                     </button>
@@ -250,6 +259,15 @@ export default function Home() {
                       >
                         <ShoppingCart size={18} />
                       </button>
+
+                      <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedProduct(product); }}
+                        className="p-3 bg-white hover:bg-purple-600 hover:text-white rounded-lg shadow-lg transition-colors group/try"
+                        title="Virtual Try-On"
+                      >
+                        <Shirt size={18} className="group-hover/try:animate-pulse" />
+                      </button>
+
                       <Link href={`/product/${product.id}`} className="p-3 bg-white hover:bg-[#33211D] hover:text-white rounded-lg shadow-lg transition-colors">
                         <Eye size={18} />
                       </Link>

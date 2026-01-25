@@ -1,13 +1,38 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, ShoppingCart, Heart, Eye } from "lucide-react";
-
 import { useCart } from "../../context/CartContext";
 import { products } from "../../lib/data";
 
 export default function Deals() {
     const { addToCart } = useCart();
+    const [timeLeft, setTimeLeft] = useState({ hours: 5, minutes: 42, seconds: 18 });
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTimeLeft(prev => {
+                let { hours, minutes, seconds } = prev;
+
+                if (seconds > 0) {
+                    seconds--;
+                } else if (minutes > 0) {
+                    minutes--;
+                    seconds = 59;
+                } else if (hours > 0) {
+                    hours--;
+                    minutes = 59;
+                    seconds = 59;
+                } else {
+                    clearInterval(timer);
+                }
+
+                return { hours, minutes, seconds };
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
 
     // Filter for deals (items with 'off', 'Sale', or 'Hot' in tag)
     const dealProducts = products.filter(p =>
@@ -29,9 +54,15 @@ export default function Deals() {
                         <p className="opacity-80">Grab the best discounts on Electronics, Fashion and more.</p>
                     </div>
                     <div className="flex space-x-4 font-mono text-xl font-bold">
-                        <div className="bg-white text-[#33211D] px-3 py-2 rounded">05h</div>
-                        <div className="bg-white text-[#33211D] px-3 py-2 rounded">42m</div>
-                        <div className="bg-white text-[#33211D] px-3 py-2 rounded">18s</div>
+                        <div className="bg-white text-[#33211D] px-3 py-2 rounded min-w-[60px] text-center">
+                            {String(timeLeft.hours).padStart(2, '0')}h
+                        </div>
+                        <div className="bg-white text-[#33211D] px-3 py-2 rounded min-w-[60px] text-center">
+                            {String(timeLeft.minutes).padStart(2, '0')}m
+                        </div>
+                        <div className="bg-white text-[#33211D] px-3 py-2 rounded min-w-[60px] text-center">
+                            {String(timeLeft.seconds).padStart(2, '0')}s
+                        </div>
                     </div>
                 </div>
 
