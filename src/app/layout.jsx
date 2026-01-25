@@ -25,6 +25,7 @@ export const metadata = {
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ChatInterface from "../components/ChatInterface";
+import CookieConsent from "../components/CookieConsent";
 
 export default function RootLayout({ children }) {
   return (
@@ -37,6 +38,7 @@ export default function RootLayout({ children }) {
           {children}
           <Footer />
           <ChatInterface />
+          <CookieConsent />
         </Providers>
       </body>
     </html>

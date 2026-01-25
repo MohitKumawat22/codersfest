@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Truck, CreditCard, Headset, Heart, Eye, ShoppingCart, Star, Shirt } from "lucide-react";
 import VirtualMannequin from "@/components/VirtualMannequin";
+import TrustBadges from "@/components/TrustBadges";
+import CustomerReviews from "@/components/CustomerReviews";
 
 import { useCart } from "../context/CartContext";
 import { products } from "../lib/data";
@@ -161,73 +163,123 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Categories Grid - General */}
-      <section className="py-12 bg-[#FAF9F6]">
+      {/* Categories Grid - Aesthetic Bento */}
+      <section className="py-20 bg-white">
         <div className="max-w-screen-xl mx-auto px-4">
-          <h2 className="text-3xl font-serif font-bold text-[#33211D] mb-8 text-center">Shop by Category</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Large Item - Electronics */}
-            <Link href="/electronics" className="bg-white p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-[400px] relative overflow-hidden group cursor-pointer">
-              <div className="relative z-10 w-2/3">
-                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest bg-white/80 py-1 px-2 rounded mb-2 inline-block">Top Rated</span>
-                <h3 className="text-3xl font-serif font-bold text-[#33211D] mb-4">Electronics & Gadgets</h3>
-                <p className="text-gray-500 text-sm mb-6 line-clamp-3">Upgrade your life with the latest tech. Smartphones, Laptops, Audio & more.</p>
-                <ul className="text-sm text-gray-400 space-y-1 mb-6">
-                  <li>Smartphones</li>
-                  <li>Laptops & Tablets</li>
-                  <li>Smart Watches</li>
-                </ul>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+            <div>
+              <span className="text-[#D4A373] text-xs font-bold uppercase tracking-[0.2em] mb-2 block">Curated Collections</span>
+              <h2 className="text-4xl md:text-5xl font-serif font-bold text-[#33211D]">Shop by Category</h2>
+            </div>
+            <Link href="/" className="hidden md:flex items-center gap-2 text-[#33211D] font-bold border-b-2 border-[#D4A373] pb-1 hover:text-[#D4A373] transition-colors">
+              View All Categories <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[550px]">
+            {/* Large Item - Electronics (Left) - Span 6 */}
+            <Link href="/electronics" className="md:col-span-6 relative rounded-[2rem] overflow-hidden group hover-card cursor-pointer shadow-lg">
+              <div className="absolute inset-0">
+                <img src="https://images.unsplash.com/photo-1498049381529-8903485d6bf4?auto=format&fit=crop&q=80&w=800"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Electronics" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80"></div>
               </div>
-              <div className="absolute right-0 bottom-0 top-0 w-1/2 bg-gray-100 group-hover:scale-105 transition-transform duration-500">
-                <img src="https://images.unsplash.com/photo-1498049381529-8903485d6bf4?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Electronics" />
+              <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full">
+                <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-white text-[10px] uppercase font-bold tracking-widest mb-4">
+                  Tech & Gadgets
+                </span>
+                <h3 className="text-3xl md:text-4xl font-serif font-bold text-white mb-2">The Future is Now</h3>
+                <div className="flex items-center text-white/90 gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
+                  <span className="text-sm font-medium">Explore Collection</span>
+                  <div className="bg-white text-black rounded-full p-1">
+                    <ArrowRight size={12} />
+                  </div>
+                </div>
               </div>
             </Link>
 
-            <div className="grid grid-cols-1 gap-6">
-              {/* Medium Item - Fashion */}
-              <Link href="/fashion" className="bg-white p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group h-[190px] flex items-center cursor-pointer">
-                <div className="relative z-10 w-2/3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-white/80 py-1 px-2 rounded mb-1 inline-block">New Season</span>
-                  <h3 className="text-2xl font-serif font-bold text-[#33211D] mb-2">Fashion & Apparel</h3>
-                  <p className="text-gray-400 text-xs">Men, Women, Kids Clothing</p>
+            {/* Right Column - Spans 6 */}
+            <div className="md:col-span-6 grid grid-rows-2 gap-6">
+              {/* Top - Fashion */}
+              <Link href="/fashion" className="relative rounded-[2rem] overflow-hidden group hover-card cursor-pointer shadow-lg">
+                <div className="absolute inset-0">
+                  <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=800"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Fashion" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
                 </div>
-                <div className="absolute right-0 bottom-0 top-0 w-1/3 bg-gray-100 group-hover:scale-105 transition-transform duration-500">
-                  <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Fashion" />
+                <div className="absolute top-0 left-0 h-full flex flex-col justify-center p-8 md:p-12">
+                  <span className="text-[#D4A373] text-xs font-bold uppercase tracking-widest mb-2">New Season</span>
+                  <h3 className="text-2xl md:text-3xl font-serif font-bold text-white mb-2">Modern Fashion</h3>
+                  <p className="text-gray-200 text-sm max-w-[200px] mb-4">Discover the latest trends in men's and women's fashion.</p>
                 </div>
               </Link>
 
-              {/* Medium Item - Home & Living */}
-              <Link href="/home-living" className="bg-white p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group h-[190px] flex items-center cursor-pointer">
-                <div className="relative z-10 w-2/3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-white/80 py-1 px-2 rounded mb-1 inline-block">Best Sellers</span>
-                  <h3 className="text-2xl font-serif font-bold text-[#33211D] mb-2">Home & Living</h3>
-                  <p className="text-gray-400 text-xs">Decor, Furniture, Kitchenware</p>
-                </div>
-                <div className="absolute right-0 bottom-0 top-0 w-1/3 bg-gray-100 group-hover:scale-105 transition-transform duration-500">
-                  <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Home" />
-                </div>
-              </Link>
+              {/* Bottom - Split - Home Living & Beauty? Or Deals? Let's do Home Living */}
+              <div className="grid grid-cols-2 gap-6">
+                <Link href="/home-living" className="relative rounded-[2rem] overflow-hidden group hover-card cursor-pointer shadow-lg bg-[#E8E6E1]">
+                  <div className="absolute inset-0 flex flex-col justify-between p-6">
+                    <div className="flex justify-between items-start">
+                      <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#33211D] shadow-sm">
+                        <Star size={14} />
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-serif font-bold text-[#33211D] leading-tight">Home &<br />Living</h3>
+                      <p className="text-[#33211D]/60 text-xs mt-1">Decor & Furniture</p>
+                    </div>
+                  </div>
+                  <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=400"
+                    className="absolute bottom-0 right-0 w-2/3 h-2/3 object-contain translate-x-4 translate-y-4 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-500" alt="Chair" />
+                </Link>
+
+                <Link href="/beauty" className="relative rounded-[2rem] overflow-hidden group hover-card cursor-pointer shadow-lg bg-[#F8E1E7]">
+                  <div className="absolute inset-0 flex flex-col justify-between p-6">
+                    <div className="flex justify-between items-start">
+                      <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#d64a75] shadow-sm">
+                        <Heart size={14} />
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-serif font-bold text-[#8a2f4c] leading-tight">Beauty &<br />Care</h3>
+                      <p className="text-[#8a2f4c]/60 text-xs mt-1">Skincare & More</p>
+                    </div>
+                  </div>
+                  <img src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&q=80&w=400"
+                    className="absolute bottom-0 right-0 w-2/3 h-2/3 object-cover rounded-tl-[2rem] group-hover:scale-105 transition-transform duration-500" alt="Beauty" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Top Seller Products - AI Curated */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-[#FDFBF7]"> {/* Subtle background change */}
         <div className="max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-end mb-10">
             <div>
               <div className="flex items-center space-x-2 mb-2">
-                <span className="bg-[#33211D] text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">AI Curated</span>
-                <span className="text-[#33211D] font-semibold text-sm uppercase tracking-widest">Trending Now</span>
+                <span className="glass px-3 py-1 rounded-full text-[#33211D] text-[10px] font-bold uppercase tracking-widest flex items-center gap-1">
+                  <Star size={10} className="fill-[#D4A373] text-[#D4A373]" /> AI Curated
+                </span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#33211D] mt-2">Top Picks for You</h2>
+              <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#33211D] mt-4">Top Picks for You</h2>
             </div>
-            <div className="flex space-x-2 mt-4 md:mt-0">
-              <Link href="/" className="px-4 py-2 bg-[#33211D] text-white text-sm font-medium rounded-md">All</Link>
-              <Link href="/electronics" className="px-4 py-2 text-gray-500 hover:text-[#33211D] text-sm font-medium">Electronics</Link>
-              <Link href="/fashion" className="px-4 py-2 text-gray-500 hover:text-[#33211D] text-sm font-medium">Fashion</Link>
-              <Link href="/home-living" className="px-4 py-2 text-gray-500 hover:text-[#33211D] text-sm font-medium">Home</Link>
+
+            {/* Aesthetic Filter Buttons */}
+            <div className="flex flex-wrap gap-3 mt-6 md:mt-0 p-1 bg-white/50 backdrop-blur-sm rounded-full border border-gray-100">
+              <Link href="/" className="px-5 py-2.5 bg-[#33211D] text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-md transition-all hover:shadow-lg">
+                All
+              </Link>
+              <Link href="/electronics" className="px-5 py-2.5 text-gray-500 hover:text-[#33211D] hover:bg-white text-xs font-bold uppercase tracking-wider rounded-full transition-all">
+                Electronics
+              </Link>
+              <Link href="/fashion" className="px-5 py-2.5 text-gray-500 hover:text-[#33211D] hover:bg-white text-xs font-bold uppercase tracking-wider rounded-full transition-all">
+                Fashion
+              </Link>
+              <Link href="/home-living" className="px-5 py-2.5 text-gray-500 hover:text-[#33211D] hover:bg-white text-xs font-bold uppercase tracking-wider rounded-full transition-all">
+                Home
+              </Link>
             </div>
           </div>
 
@@ -305,6 +357,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Trust Badges Section */}
+      <TrustBadges />
+
+      {/* Customer Reviews Section */}
+      <CustomerReviews />
 
       {/* By the Numbers Section */}
       <section className="py-20 bg-white border-t border-gray-100">
