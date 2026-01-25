@@ -76,24 +76,41 @@ Never suggest formal wear for parties or party wear for formal events.
 
 // BACKUP BRAIN: Intelligent Fallback if Ollama fails
 const getBackupResponse = (prompt: string): string => {
-    const p = prompt.toLowerCase();
+    const p = prompt.toLowerCase().trim();
 
-    // 1. Small Talk / Greetings (Crucial for "Hi")
+    // 1. Basic Greetings
     if (p.match(/^(hi|hello|hey|greetings|sup|yo)/)) {
-        return "Hi there! I'm Apna Sarthi. My neural core is active via tunnel! How can I help? (e.g. 'Red dress', 'Sneakers')";
+        return "Hey! I'm Apna Sarthi, your fashion companion. Ready to find some amazing outfits today?";
     }
 
-    if (p.includes('red') || p.includes('crimson')) return "Red is a bold choice! Check out our Scarlet Evening Dress. [FILTER:red]";
-    if (p.includes('blue') || p.includes('navy')) return "Blue brings a calm vibe. The Navy Blazer is a classic. [FILTER:blue]";
-    if (p.includes('black') || p.includes('dark')) return "You can never go wrong with black. It matches everything. [FILTER:black]";
-    if (p.includes('party') || p.includes('fun')) return "Time to celebrate! Need something sparkly? [FILTER:dress]";
-    if (p.includes('formal') || p.includes('work')) return "For a professional look, I recommend our tailored collection. [FILTER:jacket]";
-    if (p.includes('date') || p.includes('romantic')) return "Ooh, date night? Go for something elegant and timeless. [FILTER:dress]";
-    if (p.includes('shoes') || p.includes('sneaker')) return "Step up your game with our new footwear collection. [SEARCH:shoes]";
-    if (p.includes('bag') || p.includes('purse')) return "Accessories make the outfit. Here are our top bags. [SEARCH:bag]";
+    // 2. Conversational / Emotional Check-ins
+    if (p.includes("how are you") || p.includes("how are things") || p.includes("how's it going")) {
+        return "I'm doing great and feeling stylish! How can I help you elevate your look today?";
+    }
+
+    if (p.includes("who are you") || p.includes("your name")) {
+        return "I'm Apna Sarthi, an AI designed to help you shop with confidence. Ask me for styling tips or product searches!";
+    }
+
+    if (p.includes("thank") || p.includes("thanks")) {
+        return "You're very welcome! Is there anything else you'd like to see?";
+    }
+
+    if (p.includes("what can you do") || p.includes("help") || p.includes("features")) {
+        return "I can find products, recommend outfits based on your vibe, help with sizes, and even do a virtual try-on! Try saying 'Show me jackets'.";
+    }
+
+    // 3. Category/Color Intent
+    if (p.includes('red') || p.includes('crimson')) return "Red is a bold, high-energy choice! Check out our Scarlet collection. [FILTER:red]";
+    if (p.includes('blue') || p.includes('navy')) return "Blue is timeless and elegant. The Navy Blazer is a fan favorite. [FILTER:blue]";
+    if (p.includes('black') || p.includes('dark')) return "Black is the ultimate style statement. Sleek and versatile. [FILTER:black]";
+    if (p.includes('party') || p.includes('fun') || p.includes('night out')) return "Occasion: Party! Let's find you something that shines. [FILTER:dress]";
+    if (p.includes('formal') || p.includes('work') || p.includes('interview')) return "Keeping it professional? I recommend our structured blazers. [FILTER:jacket]";
+    if (p.includes('shoes') || p.includes('sneaker') || p.includes('footwear')) return "Step out in style! Here's our latest footwear. [SEARCH:shoes]";
+    if (p.includes('jacket') || p.includes('coat')) return "Stay warm and trendy. Here are our top jackets. [FILTER:jacket]";
 
     // Default-Generic for unknown inputs
-    return "That's an interesting choice! Let me show you some styles that match that vibe. [REDIRECT:/fashion]";
+    return "I love that idea! Let's explore some styles that match that vibe. [REDIRECT:/fashion]";
 };
 
 export async function POST(req: Request) {
