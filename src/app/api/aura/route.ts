@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const OLLAMA_URL = 'http://127.0.0.1:11434/api/generate';
+const OLLAMA_URL = 'https://barry-nonenigmatic-nonnormally.ngrok-free.dev/api/generate'; // [!] UPDATE THIS if you restarted ngrok!
 const MODEL_NAME = 'llama3'; // Or 'mistral', ensure user has this pulled
 
 const SYSTEM_PERSONA = `
