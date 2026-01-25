@@ -3,8 +3,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Search, Heart, ShoppingCart, User, Menu, X } from "lucide-react";
 
+import { useCart } from "../context/CartContext";
+
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const { cartCount } = useCart();
 
     return (
         <>
@@ -29,10 +32,14 @@ const Navbar = () => {
                     <div className="flex items-center md:order-2 space-x-4 md:space-x-6">
                         <button className="text-gray-600 hover:text-[#33211D] transition-colors"><Search size={20} /></button>
                         <button className="hidden md:block text-gray-600 hover:text-[#33211D] transition-colors"><Heart size={20} /></button>
-                        <button className="text-gray-600 hover:text-[#33211D] transition-colors relative">
+                        <Link href="/cart" className="text-gray-600 hover:text-[#33211D] transition-colors relative">
                             <ShoppingCart size={20} />
-                            <span className="absolute -top-2 -right-2 bg-[#33211D] text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">0</span>
-                        </button>
+                            {cartCount > 0 && (
+                                <span className="absolute -top-2 -right-2 bg-[#33211D] text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </Link>
                         <button className="hidden md:block text-gray-600 hover:text-[#33211D] transition-colors"><User size={20} /></button>
 
                         <button
@@ -55,19 +62,19 @@ const Navbar = () => {
                                 <Link href="/" className="block py-2 px-3 text-[#33211D] bg-gray-100 rounded md:bg-transparent md:p-0 font-bold" aria-current="page">Home</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Electronics</Link>
+                                <Link href="/electronics" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Electronics</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Fashion</Link>
+                                <Link href="/fashion" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Fashion</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Home & Living</Link>
+                                <Link href="/home-living" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Home & Living</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Beauty</Link>
+                                <Link href="/beauty" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Beauty</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Deals</Link>
+                                <Link href="/deals" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Deals</Link>
                             </li>
                             <li>
                                 <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Contact</Link>
