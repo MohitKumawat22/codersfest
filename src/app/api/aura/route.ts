@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { catalog } from '@/lib/catalog';
 
-// Use Ngrok Tunnel URL for "The Ngrok Way" (Public Accessibility)
-const OLLAMA_URL = process.env.OLLAMA_API_URL || 'https://barry-nonenigmatic-nonnormally.ngrok-free.dev/api/generate';
+// Use 127.0.0.1 for local connection (Ngrok handles the website tunnel on port 3000)
+const OLLAMA_URL = process.env.OLLAMA_API_URL || 'http://127.0.0.1:11434/api/generate';
 const MODEL_NAME = 'llama3'; // Or 'mistral', ensure user has this pulled
 
 // RAG-lite: Simple context injection for small catalogs
