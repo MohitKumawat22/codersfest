@@ -1,0 +1,59 @@
+APNA SARTHI - THE "SMART" COMPANION
+================================
+A Privacy-First, Neuro-Symbolic AI Fashion Agent
+
+1. THE HYBRID BRAIN (NEURO-SYMBOLIC ARCHITECTURE)
+-------------------------------------------------
+Apna Sarthi uses a dual-layer intelligence system for maximum speed and capability.
+- Layer 1 (FastBrain): A reflex system acting in <10ms. Uses regex-free semantic matching for 30+ instant intents like navigation, search, and FAQs.
+- Layer 2 (Smart Brain): A local LLM (Llama 3 via Ollama) for complex, creative, and context-aware advice when FastBrain finds no match.
+
+2. MAGIC MIRROR (VIRTUAL TRY-ON)
+--------------------------------
+Visualizes products on a digital mannequin or the user's own photo.
+- Uses Z-Index 2D Layering to overlay clothing items.
+- Dynamic color detection adapts the overlay style.
+- Supports Body Morphing based on user height/weight inputs.
+
+3. THERMO-FIT (PREDICTIVE SIZING HEATMAP)
+-----------------------------------------
+Reduces return rates by visualizing how a garment fits.
+- Calculates BMI from user inputs.
+- Generates a "Heatmap" overlay:
+  * RED zones = Tight/High Tension
+  * BLUE zones = Loose/Sagging
+  * GREEN glow = Perfect Fit
+
+4. VIBE ANALYSIS (SENTIMENT-BASED RECOMMENDATIONS)
+--------------------------------------------------
+The AI doesn't just keyword match; it understands the "Mood".
+- Analyzes user input for sentiments (Formal, Party, Casual, etc.).
+- Filters recommendations to match the occasion.
+  * Example: "Formal event" -> Hides neon/casual items, shows elegant blazers.
+  * Example: "Party vibe" -> Hides grey suits, shows sequin dresses.
+
+5. PRIVACY-FIRST TRUST SHIELD
+-----------------------------
+Built for trust and safety.
+- 100% Local Processing: No chat logs or biometric data leave the user's device.
+- Visual Trust Badges: SSL, PCI-DSS, and GDPR compliance indicators visible in the UI.
+
+6. CONVERSATIONAL COMMERCE & NAVIGATION
+---------------------------------------
+Turns words into actions.
+- "Take me to electronics" -> Auto-redirects to /electronics page.
+- "Show me sneakers" -> Opens Search Modal pre-filled with "sneakers".
+- "Open my cart" -> Navigates to Checkout.
+- Handles FAQs (Returns, Shipping, Payment) instantly.
+
+7. NATIVE BRAND INTEGRATION
+---------------------------
+- Fully themed UI (Earth Tones: #33211D & #D4A373) to match the store application.
+- Professional, non-intrusive chat interface with "Online" status and typing indicators.
+
+TECHNICAL STACK
+---------------
+- Frontend: Next.js 14 (React)
+- AI Core: Ollama (Llama 3) running locally
+- Architecture: Client-Side Logic + Local API Proxy
+- Deployment Support: Ngrok capability for live demos
