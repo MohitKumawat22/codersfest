@@ -22,6 +22,7 @@ export const metadata = {
 };
 
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import ChatInterface from "../components/ChatInterface";
 
 export default function RootLayout({ children }) {
@@ -32,8 +33,13 @@ export default function RootLayout({ children }) {
       >
         <Navbar />
         {children}
+        <Footer />
         <ChatInterface />
       </body>
     </html>
+  );
+}
+      </body >
+    </html >
   );
 }

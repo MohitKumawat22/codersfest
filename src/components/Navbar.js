@@ -55,22 +55,22 @@ const Navbar = () => {
                                 <Link href="/" className="block py-2 px-3 text-[#33211D] bg-gray-100 rounded md:bg-transparent md:p-0 font-bold" aria-current="page">Home</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Shop</Link>
+                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Electronics</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Women</Link>
+                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Fashion</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Men</Link>
+                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Home & Living</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Accessories</Link>
+                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Beauty</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">About Us</Link>
+                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Deals</Link>
                             </li>
                             <li>
-                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Contact Us</Link>
+                                <Link href="#" className="block py-2 px-3 text-gray-600 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#33211D] md:p-0">Contact</Link>
                             </li>
                         </ul>
                     </div>
