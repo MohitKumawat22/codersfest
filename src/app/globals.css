@@ -3,20 +3,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary-brown: #33211D;
+  --accent-cream: #FAF9F6;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary-brown: var(--primary-brown);
+  --color-accent-cream: var(--accent-cream);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-serif: var(--font-playfair);
 }
 
 body {
