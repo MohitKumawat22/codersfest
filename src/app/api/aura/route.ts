@@ -113,6 +113,16 @@ const getBackupResponse = (prompt: string): string => {
     return "I love that idea! Let's explore some styles that match that vibe. [REDIRECT:/fashion]";
 };
 
+const CORS_HEADERS = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, ngrok-skip-browser-warning',
+};
+
+export async function OPTIONS() {
+    return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+}
+
 export async function POST(req: Request) {
     let promptText = "";
     try {
@@ -120,7 +130,7 @@ export async function POST(req: Request) {
         promptText = prompt || "";
 
         if (!prompt) {
-            return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
+            return NextResponse.json({ error: 'Prompt is required' }, { status: 400, headers: CORS_HEADERS });
         }
 
         // Connect to Local Ollama
@@ -147,7 +157,7 @@ export async function POST(req: Request) {
         if (!response.ok) throw new Error("Ollama Service Error");
 
         const data = await response.json();
-        return NextResponse.json({ response: data.response });
+        return NextResponse.json({ response: data.response }, { headers: CORS_HEADERS });
 
     } catch (error) {
         console.error("Using Backup Brain (Ollama Unreachable):", error);
@@ -159,6 +169,6 @@ export async function POST(req: Request) {
         return NextResponse.json({
             response: backupAns,
             isBackup: true
-        });
+        }, { headers: CORS_HEADERS });
     }
 }
