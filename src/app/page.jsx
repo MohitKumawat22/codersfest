@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Truck, CreditCard, Headset, Heart, Eye, ShoppingCart, Star, Shirt } from "lucide-react";
 import VirtualMannequin from "@/components/VirtualMannequin";
+import ChatInterface from "@/components/ChatInterface";
+import SearchModal from "@/components/SearchModal";
 
 import { useCart } from "../context/CartContext";
 import { products } from "../lib/data";
@@ -11,6 +13,8 @@ import { products } from "../lib/data";
 export default function Home() {
   const { addToCart } = useCart();
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const categories = [
     { title: "For Women's", count: "2500+ items", image: "/placeholder-women.jpg", desc: "Lorem ipsum dolor sit amet." },
@@ -26,6 +30,13 @@ export default function Home() {
     products.find(p => p.id === 4) || products[3],
   ].filter(Boolean);
 
+  // Handle FastBrain actions from chat
+  const handleFastAction = (action) => {
+    if (action.type === 'SEARCH' || action.type === 'FILTER_PRODUCT') {
+      setSearchQuery(action.payload);
+      setSearchOpen(true);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-white text-[#171717]">
@@ -351,6 +362,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* AI Chat Assistant */}
+      <ChatInterface onFastAction={handleFastAction} />
+
+      {/* Search Modal for FastBrain actions */}
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} initialQuery={searchQuery} />
     </main>
   );
 }

@@ -92,9 +92,29 @@ const Footer = () => {
                     </div>
                 </div>
 
+                {/* Trust Shield - Privacy First */}
+                <div className="mb-6 flex flex-wrap justify-center gap-4">
+                    <div className="flex items-center gap-2 bg-green-50 border border-green-200 px-4 py-2 rounded-lg">
+                        <Lock size={16} className="text-green-600" />
+                        <span className="text-xs font-semibold text-green-700">SSL Secure</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg">
+                        <ShieldCheck size={16} className="text-blue-600" />
+                        <span className="text-xs font-semibold text-blue-700">PCI-DSS Verified</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-purple-50 border border-purple-200 px-4 py-2 rounded-lg">
+                        <ShieldCheck size={16} className="text-purple-600" />
+                        <span className="text-xs font-semibold text-purple-700">Local AI Processing</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 px-4 py-2 rounded-lg">
+                        <Lock size={16} className="text-gray-600" />
+                        <span className="text-xs font-semibold text-gray-700">GDPR Compliant</span>
+                    </div>
+                </div>
+
                 <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center bg-[#FAF9F6] p-4 rounded-lg">
                     <p className="text-xs text-gray-400 mb-4 md:mb-0">
-                        &copy; 2026 Apna Store. All rights reserved.
+                        &copy; 2026 Apna Store. All rights reserved. | Your data stays private
                     </p>
                     {/* Payment Badges (Simulated with text/divs for minimalism) */}
                     <div className="flex items-center space-x-3">

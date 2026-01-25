@@ -104,7 +104,7 @@ export default function VirtualMannequin({ isOpen, onClose, product }: VirtualMa
                 <div className="flex-1 space-y-6">
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                            <h2 className="text-2xl font-bold text-white">Aura-Fit™</h2>
+                            <h2 className="text-2xl font-bold text-white">Apna Sarthi-Fit™</h2>
                             <span className="bg-purple-600 text-[10px] font-bold px-2 py-0.5 rounded text-white uppercase">Live</span>
                         </div>
                         <p className="text-gray-400 text-sm">Visualize this item on your body type.</p>
@@ -215,7 +215,7 @@ export default function VirtualMannequin({ isOpen, onClose, product }: VirtualMa
                             >
                                 <div className="w-full h-full opacity-30" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '4px 4px' }}></div>
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10px] uppercase font-mono text-white/50 tracking-wider rotate-[-10deg]">
-                                    Aura
+                                    Apna Sarthi
                                 </div>
                             </div>
                         )}

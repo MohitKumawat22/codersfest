@@ -19,7 +19,7 @@ const playfair = Playfair_Display({
 
 export const metadata = {
   title: "Apna Store - Your Ultimate Shopping Destination",
-  description: "Shop the latest in fashion, beauty, electronics, and home living. Experience AI-powered style recommendations with Aura, your personal fashion assistant.",
+  description: "Shop the latest in fashion, beauty, electronics, and home living. Experience AI-powered style recommendations with Apna Sarthi, your personal fashion assistant.",
 };
 
 import Navbar from "../components/Navbar";
