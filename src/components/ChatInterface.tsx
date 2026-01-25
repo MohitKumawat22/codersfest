@@ -109,7 +109,7 @@ export default function ChatInterface({ onFastAction = () => { } }: ChatInterfac
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    ...(remoteUrl ? { 'ngrok-skip-browser-warning': 'true' } : {})
+                    'ngrok-skip-browser-warning': 'true' // Bypass ngrok warning page for all calls
                 },
                 body: JSON.stringify({ prompt: userMsg }),
             });
