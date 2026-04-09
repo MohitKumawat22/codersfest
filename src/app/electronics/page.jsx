@@ -16,7 +16,7 @@ export default function Electronics() {
                 <div className="absolute inset-0">
                     {/* Aesthetic Tech Hero Image - Minimalist Setup */}
                     <img
-                        src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=2000&auto=format&fit=crop"
+                        src="/images/hero-electronics.png"
                         alt="Aesthetic Electronics"
                         className="w-full h-full object-cover"
                     />

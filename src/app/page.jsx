@@ -19,9 +19,9 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const categories = [
-    { title: "For Women's", count: "2500+ items", image: "/placeholder-women.jpg", desc: "Lorem ipsum dolor sit amet." },
-    { title: "For Men's", count: "1500+ items", image: "/placeholder-men.jpg", desc: "Blazers, T-Shirts and Shirts, Jackets & Coats" },
-    { title: "Accessories", count: "800+ items", image: "/placeholder-accessories.jpg", desc: "Handbags, Watches, Sunglasses" },
+    { title: "For Women's", count: "2500+ items", image: "/images/hero-fashion.png", desc: "Lorem ipsum dolor sit amet." },
+    { title: "For Men's", count: "1500+ items", image: "/images/fashion-model.png", desc: "Blazers, T-Shirts and Shirts, Jackets & Coats" },
+    { title: "Accessories", count: "800+ items", image: "/images/leather-bag.png", desc: "Handbags, Watches, Sunglasses" },
   ];
 
   // Select top 4 products for "Top Picks", mixed categories
@@ -100,7 +100,7 @@ export default function Home() {
             <div className="flex-1 relative w-full max-w-lg lg:max-w-xl">
               <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-all duration-700 ease-out border-8 border-white">
                 <img
-                  src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=800"
+                  src="/images/hero-fashion.png"
                   alt="Hero Showcase"
                   className="w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-700"
                 />
@@ -109,7 +109,7 @@ export default function Home() {
                 <div className="absolute bottom-8 right-8 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-white/50 max-w-[200px] animate-bounce-slow hidden md:block">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="w-10 h-10 rounded-full bg-gray-100 overflow-hidden">
-                      <img src="/p4.jpg" className="w-full h-full object-cover" alt="Product" />
+                      <img src="/images/leather-bag.png" className="w-full h-full object-cover" alt="Product" />
                     </div>
                     <div>
                       <p className="text-xs font-bold text-[#33211D]">Leather Bag</p>
@@ -191,7 +191,7 @@ export default function Home() {
             {/* Large Item - Electronics (Left) - Span 6 */}
             <Link href="/electronics" className="md:col-span-6 relative rounded-[2rem] overflow-hidden group hover-card cursor-pointer shadow-lg">
               <div className="absolute inset-0">
-                <img src="https://images.unsplash.com/photo-1498049381529-8903485d6bf4?auto=format&fit=crop&q=80&w=800"
+                <img src="/images/hero-electronics.png"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Electronics" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80"></div>
               </div>
@@ -214,7 +214,7 @@ export default function Home() {
               {/* Top - Fashion */}
               <Link href="/fashion" className="relative rounded-[2rem] overflow-hidden group hover-card cursor-pointer shadow-lg">
                 <div className="absolute inset-0">
-                  <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=800"
+                  <img src="/images/hero-fashion.png"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Fashion" />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
                 </div>
@@ -239,7 +239,7 @@ export default function Home() {
                       <p className="text-[#33211D]/60 text-xs mt-1">Decor & Furniture</p>
                     </div>
                   </div>
-                  <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=400"
+                  <img src="/images/minimalist-decor.png"
                     className="absolute bottom-0 right-0 w-2/3 h-2/3 object-contain translate-x-4 translate-y-4 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-500" alt="Chair" />
                 </Link>
 
@@ -255,7 +255,7 @@ export default function Home() {
                       <p className="text-[#8a2f4c]/60 text-xs mt-1">Skincare & More</p>
                     </div>
                   </div>
-                  <img src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&q=80&w=400"
+                  <img src="/images/beauty-products.png"
                     className="absolute bottom-0 right-0 w-2/3 h-2/3 object-cover rounded-tl-[2rem] group-hover:scale-105 transition-transform duration-500" alt="Beauty" />
                 </Link>
               </div>

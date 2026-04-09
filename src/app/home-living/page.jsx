@@ -14,7 +14,7 @@ export default function HomeLiving() {
             {/* Hero Section - Full Width Cinematic */}
             <div className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden">
                 <img
-                    src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop"
+                    src="/images/hero-home-living.png"
                     alt="Modern Living Room"
                     className="w-full h-full object-cover"
                 />
@@ -49,7 +49,7 @@ export default function HomeLiving() {
                     {/* Item 1: Large Feature */}
                     <div className="md:col-span-2 relative group overflow-hidden rounded-2xl cursor-pointer">
                         <img
-                            src="https://images.unsplash.com/photo-1507149833265-60c3349549f1?auto=format&fit=crop&q=80&w=800"
+                            src="/images/minimalist-decor.png"
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             alt="Minimalist Decor"
                         />
@@ -62,7 +62,7 @@ export default function HomeLiving() {
                     {/* Item 2: Vertical */}
                     <div className="md:row-span-2 relative group overflow-hidden rounded-2xl cursor-pointer">
                         <img
-                            src="https://images.unsplash.com/photo-1540932296774-709772bf6208?auto=format&fit=crop&q=80&w=800"
+                            src="/images/coffee-maker.png"
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             alt="Lighting"
                         />
@@ -87,7 +87,7 @@ export default function HomeLiving() {
                     {/* Item 4 */}
                     <div className="relative group overflow-hidden rounded-2xl cursor-pointer">
                         <img
-                            src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=800"
+                            src="/images/hero-home-living.png"
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             alt="Chair"
                         />

@@ -40,7 +40,7 @@ export default function FashionPage() {
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#E5E5E5]/50 rounded-full blur-3xl -z-10"></div>
 
                         <img
-                            src="https://images.unsplash.com/photo-1627483297929-37f416fec7cd?auto=format&fit=crop&q=80&w=800"
+                            src="/images/fashion-model.png"
                             alt="Fashion Model"
                             className="h-full object-contain md:scale-110 origin-bottom"
                         />
@@ -48,7 +48,7 @@ export default function FashionPage() {
                         {/* Floating Tooltips (Decorative) */}
                         <div className="absolute top-1/4 right-10 bg-white/80 backdrop-blur p-2 rounded-full border border-white shadow-lg animate-bounce-slow hidden md:block">
                             <div className="w-12 h-12 rounded-full overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1572118228945-31ce78328aa8?auto=format&fit=crop&q=80&w=100" className="w-full h-full object-cover" alt="Sunglasses" />
+                                <img src="/images/hero-fashion.png" className="w-full h-full object-cover" alt="Sunglasses" />
                             </div>
                         </div>
                     </div>
@@ -98,7 +98,7 @@ export default function FashionPage() {
                             </ul>
                         </div>
                         <img
-                            src="https://images.unsplash.com/photo-1542596594-649edbc13630?auto=format&fit=crop&q=80&w=800"
+                            src="/images/hero-fashion.png"
                             className="absolute bottom-0 right-0 w-3/4 h-3/4 object-cover object-left-top group-hover:scale-105 transition-transform duration-700"
                             alt="Women's Fashion"
                         />
@@ -113,7 +113,7 @@ export default function FashionPage() {
                                 <p className="text-gray-400 text-xs text-sm">Blazers, Jackets & Coats</p>
                             </div>
                             <img
-                                src="https://images.unsplash.com/photo-1488161628813-99c974c76949?auto=format&fit=crop&q=80&w=800"
+                                src="/images/fashion-model.png"
                                 className="absolute bottom-0 right-0 w-1/2 h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                 alt="Men's Fashion"
                             />
@@ -126,7 +126,7 @@ export default function FashionPage() {
                                 <p className="text-gray-400 text-xs text-sm">Handbags, Watches, Sunglasses</p>
                             </div>
                             <img
-                                src="https://images.unsplash.com/photo-1575204015372-b7e163d42125?auto=format&fit=crop&q=80&w=800"
+                                src="/images/leather-bag.png"
                                 className="absolute bottom-0 right-0 w-2/3 h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                 alt="Accessories"
                             />
