@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { catalog } from '@/lib/catalog';
 
-// Use 127.0.0.1 for better stability than localhost
+// Use 127.0.0.1 for local connection (Ngrok handles the website tunnel on port 3000)
 const OLLAMA_URL = process.env.OLLAMA_API_URL || 'http://127.0.0.1:11434/api/generate';
 const MODEL_NAME = 'llama3'; // Or 'mistral', ensure user has this pulled
 
@@ -76,25 +76,52 @@ Never suggest formal wear for parties or party wear for formal events.
 
 // BACKUP BRAIN: Intelligent Fallback if Ollama fails
 const getBackupResponse = (prompt: string): string => {
-    const p = prompt.toLowerCase();
+    const p = prompt.toLowerCase().trim();
 
-    // 1. Small Talk / Greetings (Crucial for "Hi")
+    // 1. Basic Greetings
     if (p.match(/^(hi|hello|hey|greetings|sup|yo)/)) {
-        return "Hi there! I'm Apna Sarthi. Tell me what you're looking for! (e.g. 'Red dress', 'Sneakers', 'Party outfit')";
+        return "Hey! I'm Apna Sarthi, your fashion companion. Ready to find some amazing outfits today?";
     }
 
-    if (p.includes('red') || p.includes('crimson')) return "Red is a bold choice! Check out our Scarlet Evening Dress. [FILTER:red]";
-    if (p.includes('blue') || p.includes('navy')) return "Blue brings a calm vibe. The Navy Blazer is a classic. [FILTER:blue]";
-    if (p.includes('black') || p.includes('dark')) return "You can never go wrong with black. It matches everything. [FILTER:black]";
-    if (p.includes('party') || p.includes('fun')) return "Time to celebrate! Need something sparkly? [FILTER:dress]";
-    if (p.includes('formal') || p.includes('work')) return "For a professional look, I recommend our tailored collection. [FILTER:jacket]";
-    if (p.includes('date') || p.includes('romantic')) return "Ooh, date night? Go for something elegant and timeless. [FILTER:dress]";
-    if (p.includes('shoes') || p.includes('sneaker')) return "Step up your game with our new footwear collection. [SEARCH:shoes]";
-    if (p.includes('bag') || p.includes('purse')) return "Accessories make the outfit. Here are our top bags. [SEARCH:bag]";
+    // 2. Conversational / Emotional Check-ins
+    if (p.includes("how are you") || p.includes("how are things") || p.includes("how's it going")) {
+        return "I'm doing great and feeling stylish! How can I help you elevate your look today?";
+    }
+
+    if (p.includes("who are you") || p.includes("your name")) {
+        return "I'm Apna Sarthi, an AI designed to help you shop with confidence. Ask me for styling tips or product searches!";
+    }
+
+    if (p.includes("thank") || p.includes("thanks")) {
+        return "You're very welcome! Is there anything else you'd like to see?";
+    }
+
+    if (p.includes("what can you do") || p.includes("help") || p.includes("features")) {
+        return "I can find products, recommend outfits based on your vibe, help with sizes, and even do a virtual try-on! Try saying 'Show me jackets'.";
+    }
+
+    // 3. Category/Color Intent
+    if (p.includes('red') || p.includes('crimson')) return "Red is a bold, high-energy choice! Check out our Scarlet collection. [FILTER:red]";
+    if (p.includes('blue') || p.includes('navy')) return "Blue is timeless and elegant. The Navy Blazer is a fan favorite. [FILTER:blue]";
+    if (p.includes('black') || p.includes('dark')) return "Black is the ultimate style statement. Sleek and versatile. [FILTER:black]";
+    if (p.includes('party') || p.includes('fun') || p.includes('night out')) return "Occasion: Party! Let's find you something that shines. [FILTER:dress]";
+    if (p.includes('formal') || p.includes('work') || p.includes('interview')) return "Keeping it professional? I recommend our structured blazers. [FILTER:jacket]";
+    if (p.includes('shoes') || p.includes('sneaker') || p.includes('footwear')) return "Step out in style! Here's our latest footwear. [SEARCH:shoes]";
+    if (p.includes('jacket') || p.includes('coat')) return "Stay warm and trendy. Here are our top jackets. [FILTER:jacket]";
 
     // Default-Generic for unknown inputs
-    return "That's an interesting choice! Let me show you some styles that match that vibe. [REDIRECT:/fashion]";
+    return "I love that idea! Let's explore some styles that match that vibe. [REDIRECT:/fashion]";
 };
+
+const CORS_HEADERS = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, ngrok-skip-browser-warning',
+};
+
+export async function OPTIONS() {
+    return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+}
 
 export async function POST(req: Request) {
     let promptText = "";
@@ -103,7 +130,7 @@ export async function POST(req: Request) {
         promptText = prompt || "";
 
         if (!prompt) {
-            return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
+            return NextResponse.json({ error: 'Prompt is required' }, { status: 400, headers: CORS_HEADERS });
         }
 
         // Connect to Local Ollama
@@ -113,7 +140,10 @@ export async function POST(req: Request) {
 
         const response = await fetch(OLLAMA_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': 'true' // Bypass ngrok warning page
+            },
             body: JSON.stringify({
                 model: MODEL_NAME,
                 prompt: prompt,
@@ -127,7 +157,7 @@ export async function POST(req: Request) {
         if (!response.ok) throw new Error("Ollama Service Error");
 
         const data = await response.json();
-        return NextResponse.json({ response: data.response });
+        return NextResponse.json({ response: data.response }, { headers: CORS_HEADERS });
 
     } catch (error) {
         console.error("Using Backup Brain (Ollama Unreachable):", error);
@@ -139,6 +169,6 @@ export async function POST(req: Request) {
         return NextResponse.json({
             response: backupAns,
             isBackup: true
-        });
+        }, { headers: CORS_HEADERS });
     }
 }

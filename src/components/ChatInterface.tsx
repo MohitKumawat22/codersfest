@@ -102,9 +102,15 @@ export default function ChatInterface({ onFastAction = () => { } }: ChatInterfac
             }
 
             // Fallback to Smart Brain (Ollama) for complex queries
-            const res = await fetch('/api/aura', {
+            const remoteUrl = process.env.NEXT_PUBLIC_REMOTE_AI_URL;
+            const apiUrl = remoteUrl ? `${remoteUrl}/api/aura` : '/api/aura';
+
+            const res = await fetch(apiUrl, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'true' // Bypass ngrok warning page for all calls
+                },
                 body: JSON.stringify({ prompt: userMsg }),
             });
 
