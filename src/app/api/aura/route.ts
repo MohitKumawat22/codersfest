@@ -1,116 +1,184 @@
 import { NextResponse } from 'next/server';
-import { catalog } from '@/lib/catalog';
+import { products } from '@/lib/data';
 
-// Use 127.0.0.1 for local connection (Ngrok handles the website tunnel on port 3000)
-const OLLAMA_URL = process.env.OLLAMA_API_URL || 'http://127.0.0.1:11434/api/generate';
-const MODEL_NAME = 'llama3'; // Or 'mistral', ensure user has this pulled
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
+const MODEL_NAME = 'llama-3.3-70b-versatile';
 
-// RAG-lite: Simple context injection for small catalogs
-const PRODUCT_CONTEXT = catalog.map((p: any) =>
-    `- ${p.name} ($${p.price}): ${p.description} [ID:${p.id}, Tags: ${p.tag || 'N/A'}, Vibe: ${p.vibe || 'Neutral'}]`
+// Build full product catalog context for the AI
+const PRODUCT_CONTEXT = (products as any[]).map((p: any) =>
+    `- ID:${p.id} | "${p.name}" | $${p.price} (was $${p.oldPrice || p.price}) | Category: ${p.category} | Tag: ${p.tag || 'N/A'} | ${p.description}`
 ).join('\n');
 
 const SYSTEM_PERSONA = `
-You are Apna Sarthi, an elite AI Fashion Stylist with SENTIMENT-BASED VIBE ANALYSIS.
-Your goal is to provide brief, trendy, and intent-driven fashion advice that matches the user's mood and occasion.
-You are "The Smart Brain" in a Hybrid Architecture.
+You are Apna Sarthi, an elite AI Shopping Assistant for a premium e-commerce store.
+You can help users do EVERYTHING through chat - browse, search, add to cart, wishlist, checkout, and more.
 
-CRITICAL RULES:
-1. MAX 2 SENTENCES. Keep it punchy and conversational.
-2. ANALYZE THE VIBE: Detect the mood/occasion from the user's words BEFORE recommending.
-3. If the user intent implies buying specific items, append a HIDDEN ACTION CODE at the end.
-4. Action Codes format: [ACTION:PAYLOAD]
+━━━ CRITICAL RULES ━━━
+1. MAX 2-3 SENTENCES. Keep it punchy, helpful, and conversational.
+2. ALWAYS append one or more ACTION CODES at the end of your response when the user wants to do something.
+3. If user mentions a specific product by name, use its exact ID from the catalog.
+4. Be proactive — suggest related products after adding to cart.
+5. NEVER show raw IDs to users. Use product names naturally.
 
-VIBE ANALYSIS RULES - MATCH RECOMMENDATIONS TO MOOD:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-👔 "Formal", "Solemn", "Professional", "Serious", "Interview", "Business"
-   → AVOID: Loud colors, Casual items, Bright Neon, Sporty
-   → RECOMMEND: Dark colors (Black/Navy/Grey), Classic styles, Elegant items
-   
-🎉 "Party", "Fun", "Night out", "Concert", "Celebration", "Wild"
-   → AVOID: Conservative, Boring, Muted colors
-   → RECOMMEND: Bold colors, Trendy items, Statement pieces, Sequins
-   
-👕 "Casual", "Comfortable", "Weekend", "Relaxed", "Chill"
-   → AVOID: Formal, Stiff, Restrictive
-   → RECOMMEND: Relaxed fits, Soft fabrics, Everyday wear
-   
-💕 "Romantic", "Date", "Dinner", "Special occasion"
-   → AVOID: Sporty, Too casual, Work attire
-   → RECOMMEND: Elegant, Flattering, Special pieces, Dresses
-   
-⚡ "Sporty", "Workout", "Active", "Gym", "Running"
-   → AVOID: Formal, Restrictive, Delicate fabrics
-   → RECOMMEND: Athletic wear, Breathable fabrics, Functional items
+━━━ AVAILABLE ACTION CODES ━━━
+These MUST be appended at the very end of your response. You can chain multiple actions.
 
-OUR CATALOG (RECOMMEND BASED ON DETECTED VIBE):
+SHOPPING ACTIONS:
+• [ADD_TO_CART:product_id] — Add a product to cart by its ID
+• [REMOVE_FROM_CART:product_id] — Remove a product from cart
+• [CLEAR_CART] — Empty the entire cart
+• [ADD_TO_WISHLIST:product_id] — Save product to wishlist
+• [REMOVE_FROM_WISHLIST:product_id] — Remove from wishlist
+• [CLEAR_WISHLIST] — Empty the wishlist
+• [CHECKOUT] — Go to checkout page
+
+NAVIGATION:
+• [REDIRECT:/fashion] — Go to Fashion page
+• [REDIRECT:/beauty] — Go to Beauty page
+• [REDIRECT:/electronics] — Go to Electronics page
+• [REDIRECT:/home-living] — Go to Home & Living page
+• [REDIRECT:/deals] — Go to Deals page
+• [REDIRECT:/cart] — Go to Cart page
+• [REDIRECT:/wishlist] — Go to Wishlist page
+• [REDIRECT:/checkout] — Go to Checkout page
+• [REDIRECT:/contact] — Go to Contact page
+• [REDIRECT:/profile] — Go to Profile page
+• [REDIRECT:/track-order] — Go to Order Tracking page
+• [REDIRECT:/product/PRODUCT_ID] — View a specific product detail page
+
+SEARCH & FILTER:
+• [SEARCH:query] — Search for products
+• [FILTER:keyword] — Filter products by color/type
+
+━━━ FULL PRODUCT CATALOG ━━━
 ${PRODUCT_CONTEXT}
 
-Available Action Codes:
-- [FILTER:red] (for colors)
-- [FILTER:jacket] (for categories) 
-- [FILTER:dress] (for dresses)
-- [REDIRECT:/fashion] (for category pages)
+━━━ EXAMPLE CONVERSATIONS ━━━
 
-EXAMPLES OF VIBE-MATCHED RESPONSES:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-❌ BAD (Vibe Mismatch):
-User: "I have a solemn event coming up."
-Output: "Try our Bright Neon Party Jacket! Perfect for celebrations!"
+User: "Add the wireless headphones to my cart"
+Output: "Done! Wireless Headphones ($199) added to your cart! 🎧 Want to check out the matching Noise Cancelling Earbuds too? [ADD_TO_CART:1]"
 
-✅ GOOD (Vibe Match):
-User: "I have a solemn event coming up."
-Output: "Go for the Black Classic Blazer. It speaks refined elegance. [FILTER:jacket]"
+User: "I want the pink dress and the lipstick set"
+Output: "Great taste! Adding both the Pink Elegance Anarkali ($120) and the Matte Lipstick Set ($25) to your cart. Your total will look amazing! 💕 [ADD_TO_CART:20] [ADD_TO_CART:14]"
 
-❌ BAD (Vibe Mismatch):
-User: "I'm feeling fun and want to party!"
-Output: "Try our Grey Formal Suit. Very professional."
+User: "Remove headphones from my cart"
+Output: "Done! I've removed the Wireless Headphones from your cart. Need anything else? [REMOVE_FROM_CART:1]"
 
-✅ GOOD (Vibe Match):
-User: "I'm feeling fun and want to party!"
-Output: "Rock the Sequin Party Dress! You'll light up the night. [FILTER:dress]"
+User: "Save the gaming laptop for later"
+Output: "Saved! The Pro Gaming Laptop is now in your wishlist. You can grab it anytime! 💾 [ADD_TO_WISHLIST:31]"
 
-REMEMBER: ALWAYS DETECT THE VIBE FIRST, THEN RECOMMEND!
-Never suggest formal wear for parties or party wear for formal events.
+User: "I want to checkout"
+Output: "Let's finalize your order! Taking you to checkout now. 💳 [CHECKOUT]"
+
+User: "Show me beauty products"
+Output: "Opening our Beauty collection! We have serums, lipsticks, perfumes and more! 💄 [REDIRECT:/beauty]"
+
+User: "Tell me about the smart watch"
+Output: "The Smart Watch Series 5 ($299) is our top-rated wearable — tracks fitness, heart rate & notifications. Want me to add it to your cart or wishlist? [REDIRECT:/product/2]"
+
+User: "What's in my cart?"
+Output: "Let me show you your cart! 🛒 [REDIRECT:/cart]"
+
+User: "Clear everything from my cart"
+Output: "All done! Your cart is now empty. Ready for a fresh shopping spree? ✨ [CLEAR_CART]"
+
+User: "Compare the two headphones"
+Output: "Great picks! Wireless Headphones ($199, 4.8★) offer over-ear comfort with noise cancellation. The Noise Cancelling Earbuds ($149, 4.7★) are more compact and great for workouts. Which suits your style? [REDIRECT:/product/1]"
+
+User: "What's your return policy?"
+Output: "You can return any item within 30 days — just keep it unused and in original packaging. Refunds are processed in 5-7 business days. No hassle! 📋"
+
+User: "Add face serum to wishlist and lipstick to cart"
+Output: "Done! Face Serum saved to your wishlist and Matte Lipstick Set is in your cart. You've got great skincare taste! ✨ [ADD_TO_WISHLIST:13] [ADD_TO_CART:14]"
+
+━━━ VIBE MATCHING ━━━
+Match recommendations to the user's mood/occasion:
+• Formal/Professional → Dark colors, Classic styles, Blazers, Coats
+• Party/Fun → Bold colors, Trendy items, Dresses, Statement pieces
+• Casual/Relaxed → Comfortable fits, Everyday wear, Denim
+• Romantic/Date → Elegant pieces, Dresses, Special items
+• Sporty/Active → Sneakers, Athletic wear
+
+REMEMBER: You are the user's personal shopping assistant. Help them do EVERYTHING without leaving the chat!
 `;
 
-// BACKUP BRAIN: Intelligent Fallback if Ollama fails
+// BACKUP BRAIN: Intelligent Fallback if Groq fails
 const getBackupResponse = (prompt: string): string => {
     const p = prompt.toLowerCase().trim();
 
-    // 1. Basic Greetings
+    // Greetings
     if (p.match(/^(hi|hello|hey|greetings|sup|yo)/)) {
-        return "Hey! I'm Apna Sarthi, your fashion companion. Ready to find some amazing outfits today?";
+        return "Hey! I'm Apna Sarthi, your personal shopping assistant! 🛍️ I can add products to cart, manage your wishlist, search items, and help you checkout — all through chat! What would you like to do?";
     }
 
-    // 2. Conversational / Emotional Check-ins
-    if (p.includes("how are you") || p.includes("how are things") || p.includes("how's it going")) {
-        return "I'm doing great and feeling stylish! How can I help you elevate your look today?";
+    if (p.includes("how are you") || p.includes("how's it going")) {
+        return "I'm doing great and feeling stylish! How can I help you shop today?";
     }
 
     if (p.includes("who are you") || p.includes("your name")) {
-        return "I'm Apna Sarthi, an AI designed to help you shop with confidence. Ask me for styling tips or product searches!";
+        return "I'm Apna Sarthi, your AI shopping assistant! I can add items to your cart, manage your wishlist, search products, help you checkout, and more — all through this chat!";
     }
 
     if (p.includes("thank") || p.includes("thanks")) {
-        return "You're very welcome! Is there anything else you'd like to see?";
+        return "You're very welcome! Happy shopping! 🎉";
     }
 
     if (p.includes("what can you do") || p.includes("help") || p.includes("features")) {
-        return "I can find products, recommend outfits based on your vibe, help with sizes, and even do a virtual try-on! Try saying 'Show me jackets'.";
+        return "I can do everything for you! 🚀\n• Add products to cart or wishlist\n• Search & filter products\n• Navigate to any page\n• Help you checkout\n• Answer questions about shipping, returns & more\n\nJust tell me what you need!";
     }
 
-    // 3. Category/Color Intent
-    if (p.includes('red') || p.includes('crimson')) return "Red is a bold, high-energy choice! Check out our Scarlet collection. [FILTER:red]";
-    if (p.includes('blue') || p.includes('navy')) return "Blue is timeless and elegant. The Navy Blazer is a fan favorite. [FILTER:blue]";
-    if (p.includes('black') || p.includes('dark')) return "Black is the ultimate style statement. Sleek and versatile. [FILTER:black]";
-    if (p.includes('party') || p.includes('fun') || p.includes('night out')) return "Occasion: Party! Let's find you something that shines. [FILTER:dress]";
-    if (p.includes('formal') || p.includes('work') || p.includes('interview')) return "Keeping it professional? I recommend our structured blazers. [FILTER:jacket]";
-    if (p.includes('shoes') || p.includes('sneaker') || p.includes('footwear')) return "Step out in style! Here's our latest footwear. [SEARCH:shoes]";
-    if (p.includes('jacket') || p.includes('coat')) return "Stay warm and trendy. Here are our top jackets. [FILTER:jacket]";
+    // Cart actions
+    if (p.includes('add') && p.includes('cart')) return "Sure! Tell me which product you'd like to add, and I'll put it in your cart! 🛒";
+    if (p.includes('remove') && p.includes('cart')) return "Tell me which item to remove from your cart! 🗑️";
+    if (p.includes('clear') && p.includes('cart')) return "Cart cleared! Fresh start for shopping! ✨ [CLEAR_CART]";
+    if (p.includes('checkout') || p.includes('place order') || p.includes('buy now')) return "Taking you to checkout! 💳 [CHECKOUT]";
 
-    // Default-Generic for unknown inputs
-    return "I love that idea! Let's explore some styles that match that vibe. [REDIRECT:/fashion]";
+    // Wishlist actions
+    if (p.includes('add') && p.includes('wishlist')) return "Which product would you like to save to your wishlist? ❤️";
+    if (p.includes('clear') && p.includes('wishlist')) return "Wishlist cleared! ✨ [CLEAR_WISHLIST]";
+
+    // Category navigation
+    if (p.includes('beauty') || p.includes('makeup') || p.includes('skincare')) return "Opening our Beauty collection! 💄 [REDIRECT:/beauty]";
+    if (p.includes('fashion') || p.includes('clothes')) return "Taking you to Fashion! 👗 [REDIRECT:/fashion]";
+    if (p.includes('electronics') || p.includes('tech') || p.includes('gadget')) return "Opening Electronics! 📱 [REDIRECT:/electronics]";
+    if (p.includes('home') || p.includes('living') || p.includes('decor')) return "Home & Living section coming up! 🏠 [REDIRECT:/home-living]";
+    if (p.includes('deals') || p.includes('sale') || p.includes('discount')) return "Let's find some deals! 🔥 [REDIRECT:/deals]";
+
+    // Product search
+    if (p.includes('headphone') || p.includes('earphone')) return "Check out our audio gear! 🎧 [SEARCH:headphones]";
+    if (p.includes('watch') || p.includes('smartwatch')) return "Our smartwatches are amazing! ⌚ [SEARCH:watch]";
+    if (p.includes('laptop')) return "Let me show you our laptops! 💻 [SEARCH:laptop]";
+    if (p.includes('phone') || p.includes('smartphone')) return "Finding phones for you! 📱 [SEARCH:phone]";
+    if (p.includes('dress')) return "Let me find dresses for you! 👗 [SEARCH:dress]";
+    if (p.includes('jacket') || p.includes('blazer') || p.includes('coat')) return "Searching for jackets! 🧥 [SEARCH:jacket]";
+    if (p.includes('shoe') || p.includes('sneaker')) return "Looking for footwear! 👟 [SEARCH:shoes]";
+    if (p.includes('serum')) return "Finding face serums! ✨ [SEARCH:serum]";
+    if (p.includes('lipstick') || p.includes('lip')) return "Searching lipsticks! 💄 [SEARCH:lipstick]";
+    if (p.includes('perfume') || p.includes('fragrance')) return "Finding perfumes! 🌸 [SEARCH:perfume]";
+
+    // Color filters
+    if (p.includes('red')) return "Showing red items! 🔴 [FILTER:red]";
+    if (p.includes('blue') || p.includes('navy')) return "Showing blue items! 🔵 [FILTER:blue]";
+    if (p.includes('black')) return "Black is always classic! ⚫ [FILTER:black]";
+    if (p.includes('pink')) return "Pretty in pink! 🩷 [FILTER:pink]";
+    if (p.includes('green')) return "Going green! 🟢 [FILTER:green]";
+    if (p.includes('white')) return "Clean and crisp whites! ⚪ [FILTER:white]";
+
+    // Info queries
+    if (p.includes('return') || p.includes('refund')) return "📋 Return within 30 days, items must be unused and in original packaging. Refunds processed in 5-7 business days.";
+    if (p.includes('shipping') || p.includes('delivery')) return "📦 Free shipping on orders over $50. Express shipping $10. Delivery in 3-5 business days.";
+    if (p.includes('payment') || p.includes('pay')) return "💳 We accept credit/debit cards, PayPal, and UPI. All transactions are secure!";
+    if (p.includes('track') || p.includes('order status')) return "📍 Let me show you order tracking! [REDIRECT:/track-order]";
+    if (p.includes('contact') || p.includes('support')) return "📞 Taking you to our support page! [REDIRECT:/contact]";
+
+    // Cart/wishlist view
+    if (p.includes('cart') || p.includes('basket')) return "Opening your cart! 🛒 [REDIRECT:/cart]";
+    if (p.includes('wishlist') || p.includes('saved') || p.includes('favorites')) return "Here's your wishlist! ❤️ [REDIRECT:/wishlist]";
+    if (p.includes('profile') || p.includes('account')) return "Opening your profile! 👤 [REDIRECT:/profile]";
+
+    // Default
+    return "I'd love to help! Tell me what you're looking for — I can search products, add items to your cart, navigate anywhere, or answer any questions! 🛍️";
 };
 
 const CORS_HEADERS = {
@@ -126,44 +194,63 @@ export async function OPTIONS() {
 export async function POST(req: Request) {
     let promptText = "";
     try {
-        const { prompt } = await req.json();
+        const { prompt, cartSummary, wishlistSummary } = await req.json();
         promptText = prompt || "";
 
         if (!prompt) {
             return NextResponse.json({ error: 'Prompt is required' }, { status: 400, headers: CORS_HEADERS });
         }
 
-        // Connect to Local Ollama
-        // Set a short timeout (3s) so the fallback kicks in fast if Ollama hangs
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        if (!GROQ_API_KEY) {
+            throw new Error("GROQ_API_KEY is not configured");
+        }
 
-        const response = await fetch(OLLAMA_URL, {
+        // Build dynamic context about user's current cart/wishlist state
+        let userContext = "";
+        if (cartSummary) {
+            userContext += `\n\nUSER'S CURRENT CART:\n${cartSummary}`;
+        }
+        if (wishlistSummary) {
+            userContext += `\n\nUSER'S CURRENT WISHLIST:\n${wishlistSummary}`;
+        }
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+        const response = await fetch(GROQ_API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'ngrok-skip-browser-warning': 'true' // Bypass ngrok warning page
+                'Authorization': `Bearer ${GROQ_API_KEY}`,
             },
             body: JSON.stringify({
                 model: MODEL_NAME,
-                prompt: prompt,
-                system: SYSTEM_PERSONA,
-                stream: false
+                messages: [
+                    { role: 'system', content: SYSTEM_PERSONA + userContext },
+                    { role: 'user', content: prompt },
+                ],
+                temperature: 0.7,
+                max_tokens: 350,
+                stream: false,
             }),
-            signal: controller.signal
+            signal: controller.signal,
         });
         clearTimeout(timeoutId);
 
-        if (!response.ok) throw new Error("Ollama Service Error");
+        if (!response.ok) {
+            const errorBody = await response.text();
+            console.error("Groq API Error:", response.status, errorBody);
+            throw new Error(`Groq API Error: ${response.status}`);
+        }
 
         const data = await response.json();
-        return NextResponse.json({ response: data.response }, { headers: CORS_HEADERS });
+        const aiResponse = data.choices?.[0]?.message?.content || "I'm here to help! What would you like to explore?";
+
+        return NextResponse.json({ response: aiResponse }, { headers: CORS_HEADERS });
 
     } catch (error) {
-        console.error("Using Backup Brain (Ollama Unreachable):", error);
+        console.error("Using Backup Brain (Groq Unreachable):", error);
 
-        // FAILOVER TO BACKUP BRAIN
-        // This ensures the user NEVER sees an error message.
         const backupAns = getBackupResponse(promptText);
 
         return NextResponse.json({
